@@ -1,2 +1,1 @@
-# digital-trace
-# digital-traces
+# Digital Traces
