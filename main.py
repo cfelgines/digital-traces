@@ -4,9 +4,6 @@ app = Flask(__name__)
 
 @app.route('/', methods=["GET"])
 def hello_world():
-    return "Hello World"
-
-def hello_world():
     prefix_google = """
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-PZD5P4M93D"></script> 
