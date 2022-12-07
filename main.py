@@ -58,3 +58,5 @@ def mycookies():
 def mycookieganalytics():
     req = requests.get("https://analytics.google.com/analytics/web/#/report-home/a251006635w345098879p281216621/%3F_u..nav=default")
     return req.text
+
+    
