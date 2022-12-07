@@ -27,9 +27,19 @@ def hello_world():
 def printMsg():
     app.logger.warning('Hi i am log')
     script = """
+    <body>
     <script>
     console.log('coucou la console')
+    function formdata() 
+    {
+    var consolelogggg= document.getElementById("name").value;
+    console.log(consolelogggg)
+    }
     </script>
+    <input type="text" id="name"/><br><br>
+    <input type="submit" value="Submit" onclick="formdata()"/><br>
+
+    </body>
     """
     #print('Hello world!', file=sys.stdout)
     return "Check your console" + script
