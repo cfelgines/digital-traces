@@ -86,52 +86,6 @@ def mycookiefrequentation():
     req = requests.get("https://analytics.google.com/analytics/web/#/report-home/a251006635w345098879p281216621/%3F_u..nav=default")
     return req.text
 
-# @app.route('/tp3gtfirstreq', methods=["GET","POST"])
-# def googletrendrequestone():
-#     pytrends = TrendReq(hl='en-US', tz=360)
-#     pytrends.build_payload(kw_list=['france'])
-#     que = pytrends.interest_over_time()
-#     return que['france'].tolist()
-
-# @app.route('/tp3gtsecondreq', methods=["GET","POST"])
-# def googletrendrequesttwo():
-#     pytrends = TrendReq(hl='en-US', tz=360)
-#     pytrends.build_payload(kw_list=['france'])
-#     que = pytrends.interest_over_time()
-#     quer=que['france'].tolist()
-#     date = str(que.index)
-#     script = """
-#     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js">
-#     <canvas id="myChart" width="400" height="400"></canvas>
-
-#     // Line chart
-#     new Chart(document.getElementById("myChart"), {
-#         type: 'line',
-#         data: {
-#             labels: """ + date + """,
-#             datasets: [{
-#                 data: """ + quer + """,
-#                 label: "france",
-#                 borderColor: "#3e95cd",
-#                 fill: false
-#             }
-#             ]
-#         },
-#         options: {
-#             title: {
-#                 display: true,
-#                 text: 'Number of research of france'
-#             },
-#             hover: {
-#                 mode: 'index',
-#                 intersect: true
-#             },
-#         }
-#     });
-#     </script>
-#     """
-    
-#     return script
 
 if __name__ == '__main__':
     app.run(debug=True)
