@@ -1,14 +1,15 @@
 from flask import Flask
 import logging
-import requests 
+import requests
 from pytrends.request import TrendReq
-import os
 from apiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
+from datetime import datetime
 
 from dotenv import load_dotenv
 
 load_dotenv()
+logger = logging.getLogger(__name__)
 
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
 KEY_FILE_LOCATION = 'deta-app-373515-35e1e0cfd6a0.json'
@@ -65,7 +66,6 @@ def printMsg():
 
 @app.route('/visits', methods = ['GET', 'POST'])
 def get_nb_visitors():
-
     analytics = initialize_analyticsreporting()
     response = get_report(analytics)
     nb_visitor = print_response(response)
@@ -149,3 +149,70 @@ def print_response(response):
         for metricHeader, value in zip(metricHeaders, values.get('values')):
           visitors = value
   return str(visitors)
+
+# TP3
+# Google trend
+
+@app.route('/trendgoogle', methods=["GET","POST"])
+def googletrendchart():
+  topic_1 = "Paris"
+  topic_2 = "Londres"
+
+  pytrends = TrendReq()
+  pytrends.build_payload(kw_list=[topic_1, topic_2], timeframe='today 5-y', geo='FR')
+  df = pytrends.interest_over_time()
+
+  data_topic_1 = df[topic_1].tolist()
+  data_topic_2 = df[topic_2].tolist()
+  data_date = df.index.values.tolist()
+
+  timestamp_in_seconds=[element/1e9 for element in data_date]
+  date= [datetime.fromtimestamp(element) for element in timestamp_in_seconds]
+  days=[element.date() for element in date]
+  months=[element.isoformat() for element in days]
+
+  params = {
+    "type": 'line',
+    "data": {
+      "labels": months,
+      "datasets": [{
+        "label": topic_1,
+        "data": data_topic_1,
+        "borderColor": '#3e95cd',
+        "fill": 'false',
+      },
+      {
+        "label": topic_2,
+        "data": data_topic_2,
+        "borderColor": '#ffce56',
+        "fill": 'false',
+      }
+      ]
+    },
+    "options": {
+      "title": {
+        "text": 'Comparaison entre'# + str(topic_1) + " et " + str(topic_2)
+      },
+      "scales": {
+        "yAxes": [{
+          "ticks": {
+            "beginAtZero": 'true'
+          }
+        }]
+      }
+    }
+  }
+
+  prefix_chartjs = """
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+  <canvas id="myChart" width="1200px" height="700px"></canvas>""" + f"""
+  <script>
+  var ctx = document.getElementById('myChart');
+  var myChart = new Chart(ctx, {params});
+  </script>
+
+  """
+
+  return prefix_chartjs
+
+
